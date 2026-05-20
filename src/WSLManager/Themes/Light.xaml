@@ -1,0 +1,20 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Light Theme Colors -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#1976D2"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#0D47A1"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="#FF4081"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#212121"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#757575"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#E0E0E0"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#4CAF50"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#FF9800"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#F44336"/>
+    <SolidColorBrush x:Key="ChartGridBrush" Color="#E0E0E0"/>
+    <SolidColorBrush x:Key="LogBackgroundBrush" Color="#F8F9FA"/>
+    <SolidColorBrush x:Key="LogToolbarBrush" Color="#E9ECEF"/>
+    <FontFamily x:Key="UiFontFamily">pack://application:,,,/Fonts/Inter-VariableFont_opsz,wght.ttf#Inter, pack://application:,,,/Fonts/NotoSansSC-VariableFont_wght.ttf#Noto Sans SC, Segoe UI, Microsoft YaHei</FontFamily>
+    <FontFamily x:Key="MonoFontFamily">pack://application:,,,/Fonts/JetBrainsMono-VariableFont_wght.ttf#JetBrains Mono, Consolas, Courier New</FontFamily>
+</ResourceDictionary>

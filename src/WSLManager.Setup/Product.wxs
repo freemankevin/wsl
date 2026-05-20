@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package Name="WSL Manager"
+           Manufacturer="WSLManager"
+           Version="1.0.0"
+           UpgradeCode="A1B2C3D4-E5F6-7890-ABCD-EF1234567890"
+           Scope="perMachine">
+
+    <MajorUpgrade DowngradeErrorMessage="已安装更高版本。" />
+    <ui:WixUI Id="WixUI_Minimal" />
+
+    <Feature Id="MainFeature" Title="WSL Manager">
+      <ComponentGroupRef Id="PublishedComponents" />
+      <ComponentRef Id="ApplicationShortcuts" />
+    </Feature>
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="WSLManager">
+        <Component Id="MainExecutable" Bitness="always64">
+          <File Id="WSLManagerExe"
+                Source="$(var.WSLManager.TargetDir)WSLManager.exe"
+                KeyPath="yes" />
+        </Component>
+        <Component Id="CoreDll" Bitness="always64">
+          <File Id="WSLManagerCoreDll"
+                Source="$(var.WSLManager.TargetDir)WSLManager.Core.dll"
+                KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="WSL Manager">
+        <Component Id="ApplicationShortcuts">
+          <Shortcut Id="ApplicationStartMenuShortcut"
+                   Name="WSL Manager"
+                   Description="WSL Manager"
+                   Target="[INSTALLFOLDER]WSLManager.exe"
+                   WorkingDirectory="INSTALLFOLDER" />
+          <RemoveFolder Id="ApplicationProgramsFolder"
+                       On="uninstall" />
+          <RegistryValue Root="HKCU"
+                          Key="Software\WSLManager"
+                          Name="Installed"
+                          Type="integer"
+                          Value="1"
+                          KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <ComponentGroup Id="PublishedComponents" Directory="INSTALLFOLDER">
+      <ComponentRef Id="MainExecutable" />
+      <ComponentRef Id="CoreDll" />
+    </ComponentGroup>
+  </Package>
+</Wix>

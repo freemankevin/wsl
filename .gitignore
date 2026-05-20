@@ -1,0 +1,48 @@
+## .NET / WPF
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio
+.vs/
+.vscode/
+
+## Build outputs
+out/
+publish/
+artifacts/
+*.exe
+*.dll
+*.pdb
+*.msi
+
+## NuGet
+*.nupkg
+packages/
+
+## Temporary files
+*.tmp
+*.temp
+*.cache
+*.log
+*.bak
+*~
+
+## WPF generated
+*.g.cs
+*.g.i.cs
+*_wpftmp.*
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Claude
+.claude/
+
+## WiX / Installer
+*.wixpdb
+*.wixobj

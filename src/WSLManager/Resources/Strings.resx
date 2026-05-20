@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppTitle" xml:space="preserve"><value>WSL Manager</value></data>
+  <data name="StatusReady" xml:space="preserve"><value>Ready</value></data>
+  <data name="StatusCount" xml:space="preserve"><value>{0} distributions</value></data>
+  <data name="ColumnName" xml:space="preserve"><value>Name</value></data>
+  <data name="ColumnState" xml:space="preserve"><value>State</value></data>
+  <data name="ColumnVersion" xml:space="preserve"><value>Version</value></data>
+  <data name="ColumnDefault" xml:space="preserve"><value>Default</value></data>
+  <data name="ColumnCpu" xml:space="preserve"><value>CPU %</value></data>
+  <data name="ColumnMemory" xml:space="preserve"><value>Memory (MB)</value></data>
+  <data name="ColumnActions" xml:space="preserve"><value>Actions</value></data>
+  <data name="ButtonStart" xml:space="preserve"><value>Start</value></data>
+  <data name="ButtonStop" xml:space="preserve"><value>Stop</value></data>
+  <data name="ButtonRestart" xml:space="preserve"><value>Restart</value></data>
+  <data name="ButtonDelete" xml:space="preserve"><value>Delete</value></data>
+  <data name="ButtonRefresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="ButtonTheme" xml:space="preserve"><value>Theme</value></data>
+  <data name="ButtonExit" xml:space="preserve"><value>Exit</value></data>
+  <data name="ButtonLanguage" xml:space="preserve"><value>Language</value></data>
+  <data name="LogInit" xml:space="preserve"><value>WSL Manager started</value></data>
+  <data name="LogStart" xml:space="preserve"><value>Starting {0}...</value></data>
+  <data name="LogStartSuccess" xml:space="preserve"><value>{0} started</value></data>
+  <data name="LogStartFail" xml:space="preserve"><value>Failed to start {0}</value></data>
+  <data name="LogStop" xml:space="preserve"><value>Stopping {0}...</value></data>
+  <data name="LogStopSuccess" xml:space="preserve"><value>{0} stopped</value></data>
+  <data name="LogStopFail" xml:space="preserve"><value>Failed to stop {0}</value></data>
+  <data name="LogRestart" xml:space="preserve"><value>Restarting {0}...</value></data>
+  <data name="LogRestartStopFail" xml:space="preserve"><value>Failed to stop {0}, cannot restart</value></data>
+  <data name="LogRestartWait" xml:space="preserve"><value>Waiting 1 second before starting...</value></data>
+  <data name="LogRestartSuccess" xml:space="preserve"><value>{0} restarted</value></data>
+  <data name="LogRestartFail" xml:space="preserve"><value>Failed to start {0}, restart incomplete</value></data>
+  <data name="LogDelete" xml:space="preserve"><value>Deleting {0}...</value></data>
+  <data name="LogDeleteStopFirst" xml:space="preserve"><value>{0} is running, stopping first...</value></data>
+  <data name="LogDeleteStopped" xml:space="preserve"><value>{0} stopped</value></data>
+  <data name="LogDeleteStopFail" xml:space="preserve"><value>Failed to stop {0}, delete cancelled</value></data>
+  <data name="LogDeleteSuccess" xml:space="preserve"><value>{0} deleted</value></data>
+  <data name="LogDeleteFail" xml:space="preserve"><value>Failed to delete {0}</value></data>
+  <data name="ConfirmDelete" xml:space="preserve"><value>Are you sure you want to delete {0}? This cannot be undone!</value></data>
+  <data name="ConfirmDeleteTitle" xml:space="preserve"><value>Delete Confirmation</value></data>
+  <data name="ErrorWslNotInstalled" xml:space="preserve"><value>WSL is not installed or enabled. Please run `wsl --install` or enable the Windows feature.</value></data>
+  <data name="ErrorRefreshFailed" xml:space="preserve"><value>Refresh failed: {0}</value></data>
+  <data name="ErrorStopException" xml:space="preserve"><value>Stop exception: {0}</value></data>
+  <data name="ErrorRestartException" xml:space="preserve"><value>Restart exception: {0}</value></data>
+  <data name="ErrorDeleteException" xml:space="preserve"><value>Delete exception: {0}</value></data>
+  <data name="ThemeDark" xml:space="preserve"><value>Dark</value></data>
+  <data name="ThemeLight" xml:space="preserve"><value>Light</value></data>
+  <data name="LangEnglish" xml:space="preserve"><value>English</value></data>
+  <data name="LangChinese" xml:space="preserve"><value>中文</value></data>
+  <data name="LogPanelTitle" xml:space="preserve"><value>Logs</value></data>
+  <data name="LogCopy" xml:space="preserve"><value>Copy All</value></data>
+  <data name="LogClear" xml:space="preserve"><value>Clear</value></data>
+  <data name="EmptyStateTitle" xml:space="preserve"><value>No WSL distributions detected</value></data>
+  <data name="EmptyStateDesc" xml:space="preserve"><value>Please ensure WSL is installed and has at least one Linux distribution.</value></data>
+  <data name="EmptyStateTip" xml:space="preserve"><value>If already installed but not showing, try clicking the refresh button.</value></data>
+  <data name="StateRunning" xml:space="preserve"><value>Running</value></data>
+  <data name="StateStopped" xml:space="preserve"><value>Stopped</value></data>
+  <data name="TooltipRefresh" xml:space="preserve"><value>Refresh list</value></data>
+  <data name="TooltipTheme" xml:space="preserve"><value>Toggle dark/light theme</value></data>
+  <data name="TooltipExit" xml:space="preserve"><value>Exit application</value></data>
+  <data name="TooltipStart" xml:space="preserve"><value>Start distribution</value></data>
+  <data name="TooltipStop" xml:space="preserve"><value>Stop distribution</value></data>
+  <data name="TooltipRestart" xml:space="preserve"><value>Restart distribution</value></data>
+  <data name="TooltipDelete" xml:space="preserve"><value>Delete distribution</value></data>
+  <data name="LogCountFormat" xml:space="preserve"><value>{0} entries</value></data>
+  <data name="StatusYes" xml:space="preserve"><value>Yes</value></data>
+  <data name="StatusNo" xml:space="preserve"><value>No</value></data>
+  <data name="ConfirmShutdown" xml:space="preserve"><value>Shutdown all WSL? All VMs will be terminated.</value></data>
+  <data name="ConfirmShutdownTitle" xml:space="preserve"><value>Confirm</value></data>
+  <data name="ConfirmUnregister" xml:space="preserve"><value>Unregister (permanently delete) {0}? Data cannot be recovered!</value></data>
+  <data name="ConfirmUnregisterTitle" xml:space="preserve"><value>Dangerous Operation</value></data>
+  <data name="DialogImportTitle" xml:space="preserve"><value>Import WSL</value></data>
+  <data name="DialogImportName" xml:space="preserve"><value>Distribution name:</value></data>
+  <data name="DialogInstallLocation" xml:space="preserve"><value>Install location</value></data>
+  <data name="ButtonOK" xml:space="preserve"><value>OK</value></data>
+  <data name="ButtonCancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="TooltipShortcuts" xml:space="preserve"><value>Keyboard shortcuts (F1)</value></data>
+  <data name="ShortcutsTitle" xml:space="preserve"><value>Keyboard Shortcuts</value></data>
+  <data name="ShortcutsGlobal" xml:space="preserve"><value>Global</value></data>
+  <data name="ShortcutsList" xml:space="preserve"><value>List Operations</value></data>
+  <data name="ShortcutExit" xml:space="preserve"><value>Exit application</value></data>
+  <data name="ShortcutRefresh" xml:space="preserve"><value>Refresh list</value></data>
+  <data name="ShortcutLanguage" xml:space="preserve"><value>Toggle language</value></data>
+  <data name="ShortcutHelp" xml:space="preserve"><value>Show shortcuts</value></data>
+  <data name="ShortcutStart" xml:space="preserve"><value>Start selected distribution</value></data>
+  <data name="ShortcutDelete" xml:space="preserve"><value>Delete selected distribution</value></data>
+  <data name="TrayMenuShow" xml:space="preserve"><value>Show Main Window</value></data>
+  <data name="TrayMenuExit" xml:space="preserve"><value>Exit</value></data>
+</root>

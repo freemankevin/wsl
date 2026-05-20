@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppTitle" xml:space="preserve"><value>WSL 管理器</value></data>
+  <data name="StatusReady" xml:space="preserve"><value>就绪</value></data>
+  <data name="StatusCount" xml:space="preserve"><value>共 {0} 个分发版</value></data>
+  <data name="ColumnName" xml:space="preserve"><value>名称</value></data>
+  <data name="ColumnState" xml:space="preserve"><value>状态</value></data>
+  <data name="ColumnVersion" xml:space="preserve"><value>WSL版本</value></data>
+  <data name="ColumnDefault" xml:space="preserve"><value>默认</value></data>
+  <data name="ColumnCpu" xml:space="preserve"><value>CPU %</value></data>
+  <data name="ColumnMemory" xml:space="preserve"><value>内存 (MB)</value></data>
+  <data name="ColumnActions" xml:space="preserve"><value>操作</value></data>
+  <data name="ButtonStart" xml:space="preserve"><value>启动</value></data>
+  <data name="ButtonStop" xml:space="preserve"><value>停止</value></data>
+  <data name="ButtonRestart" xml:space="preserve"><value>重启</value></data>
+  <data name="ButtonDelete" xml:space="preserve"><value>删除</value></data>
+  <data name="ButtonRefresh" xml:space="preserve"><value>刷新</value></data>
+  <data name="ButtonTheme" xml:space="preserve"><value>主题</value></data>
+  <data name="ButtonExit" xml:space="preserve"><value>退出</value></data>
+  <data name="ButtonLanguage" xml:space="preserve"><value>语言</value></data>
+  <data name="LogInit" xml:space="preserve"><value>WSL 管理器已启动</value></data>
+  <data name="LogStart" xml:space="preserve"><value>正在启动 {0}...</value></data>
+  <data name="LogStartSuccess" xml:space="preserve"><value>{0} 已启动</value></data>
+  <data name="LogStartFail" xml:space="preserve"><value>启动 {0} 失败</value></data>
+  <data name="LogStop" xml:space="preserve"><value>正在停止 {0}...</value></data>
+  <data name="LogStopSuccess" xml:space="preserve"><value>{0} 已停止</value></data>
+  <data name="LogStopFail" xml:space="preserve"><value>停止 {0} 失败</value></data>
+  <data name="LogRestart" xml:space="preserve"><value>正在重启 {0}...</value></data>
+  <data name="LogRestartStopFail" xml:space="preserve"><value>停止 {0} 失败，无法重启</value></data>
+  <data name="LogRestartWait" xml:space="preserve"><value>等待 1 秒后启动...</value></data>
+  <data name="LogRestartSuccess" xml:space="preserve"><value>{0} 已重启</value></data>
+  <data name="LogRestartFail" xml:space="preserve"><value>启动 {0} 失败，重启未完成</value></data>
+  <data name="LogDelete" xml:space="preserve"><value>正在删除 {0}...</value></data>
+  <data name="LogDeleteStopFirst" xml:space="preserve"><value>{0} 正在运行，先停止...</value></data>
+  <data name="LogDeleteStopped" xml:space="preserve"><value>{0} 已停止</value></data>
+  <data name="LogDeleteStopFail" xml:space="preserve"><value>无法停止 {0}，删除取消</value></data>
+  <data name="LogDeleteSuccess" xml:space="preserve"><value>{0} 已删除</value></data>
+  <data name="LogDeleteFail" xml:space="preserve"><value>删除 {0} 失败</value></data>
+  <data name="ConfirmDelete" xml:space="preserve"><value>确定要删除 {0} 吗？此操作不可恢复！</value></data>
+  <data name="ConfirmDeleteTitle" xml:space="preserve"><value>删除确认</value></data>
+  <data name="ErrorWslNotInstalled" xml:space="preserve"><value>未检测到 WSL。请运行 `wsl --install` 或启用 Windows 功能。</value></data>
+  <data name="ErrorRefreshFailed" xml:space="preserve"><value>刷新失败: {0}</value></data>
+  <data name="ErrorStopException" xml:space="preserve"><value>关闭异常: {0}</value></data>
+  <data name="ErrorRestartException" xml:space="preserve"><value>重启异常: {0}</value></data>
+  <data name="ErrorDeleteException" xml:space="preserve"><value>删除异常: {0}</value></data>
+  <data name="ThemeDark" xml:space="preserve"><value>深色</value></data>
+  <data name="ThemeLight" xml:space="preserve"><value>浅色</value></data>
+  <data name="LangEnglish" xml:space="preserve"><value>English</value></data>
+  <data name="LangChinese" xml:space="preserve"><value>中文</value></data>
+  <data name="LogPanelTitle" xml:space="preserve"><value>运行日志</value></data>
+  <data name="LogCopy" xml:space="preserve"><value>复制全部</value></data>
+  <data name="LogClear" xml:space="preserve"><value>清空日志</value></data>
+  <data name="EmptyStateTitle" xml:space="preserve"><value>未检测到 WSL 分发版</value></data>
+  <data name="EmptyStateDesc" xml:space="preserve"><value>请确保 WSL 已安装且至少有一个 Linux 分发版。</value></data>
+  <data name="EmptyStateTip" xml:space="preserve"><value>如果已安装但仍不显示，请尝试点击刷新按钮。</value></data>
+  <data name="StateRunning" xml:space="preserve"><value>运行中</value></data>
+  <data name="StateStopped" xml:space="preserve"><value>已停止</value></data>
+  <data name="TooltipRefresh" xml:space="preserve"><value>刷新列表</value></data>
+  <data name="TooltipTheme" xml:space="preserve"><value>切换深色/浅色主题</value></data>
+  <data name="TooltipExit" xml:space="preserve"><value>退出程序</value></data>
+  <data name="TooltipStart" xml:space="preserve"><value>启动分发版</value></data>
+  <data name="TooltipStop" xml:space="preserve"><value>停止分发版</value></data>
+  <data name="TooltipRestart" xml:space="preserve"><value>重启分发版</value></data>
+  <data name="TooltipDelete" xml:space="preserve"><value>删除分发版</value></data>
+  <data name="LogCountFormat" xml:space="preserve"><value>{0} 条</value></data>
+  <data name="StatusYes" xml:space="preserve"><value>是</value></data>
+  <data name="StatusNo" xml:space="preserve"><value>否</value></data>
+  <data name="ConfirmShutdown" xml:space="preserve"><value>关闭所有 WSL？所有虚拟机将被终止。</value></data>
+  <data name="ConfirmShutdownTitle" xml:space="preserve"><value>确认</value></data>
+  <data name="ConfirmUnregister" xml:space="preserve"><value>注销（永久删除）{0}？数据无法恢复！</value></data>
+  <data name="ConfirmUnregisterTitle" xml:space="preserve"><value>危险操作</value></data>
+  <data name="DialogImportTitle" xml:space="preserve"><value>导入 WSL</value></data>
+  <data name="DialogImportName" xml:space="preserve"><value>分发版名称：</value></data>
+  <data name="DialogInstallLocation" xml:space="preserve"><value>安装位置</value></data>
+  <data name="ButtonOK" xml:space="preserve"><value>确定</value></data>
+  <data name="ButtonCancel" xml:space="preserve"><value>取消</value></data>
+  <data name="TooltipShortcuts" xml:space="preserve"><value>快捷键说明 (F1)</value></data>
+  <data name="ShortcutsTitle" xml:space="preserve"><value>快捷键</value></data>
+  <data name="ShortcutsGlobal" xml:space="preserve"><value>全局</value></data>
+  <data name="ShortcutsList" xml:space="preserve"><value>列表操作</value></data>
+  <data name="ShortcutExit" xml:space="preserve"><value>退出应用</value></data>
+  <data name="ShortcutRefresh" xml:space="preserve"><value>刷新列表</value></data>
+  <data name="ShortcutLanguage" xml:space="preserve"><value>切换语言</value></data>
+  <data name="ShortcutHelp" xml:space="preserve"><value>显示快捷键</value></data>
+  <data name="ShortcutStart" xml:space="preserve"><value>启动选中分发版</value></data>
+  <data name="ShortcutDelete" xml:space="preserve"><value>删除选中分发版</value></data>
+  <data name="TrayMenuShow" xml:space="preserve"><value>显示主窗口</value></data>
+  <data name="TrayMenuExit" xml:space="preserve"><value>退出</value></data>
+</root>

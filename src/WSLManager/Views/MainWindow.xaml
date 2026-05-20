@@ -1,0 +1,284 @@
+<Window x:Class="WSLManager.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:WSLManager.ViewModels"
+        xmlns:conv="clr-namespace:WSLManager.Converters"
+        xmlns:local="clr-namespace:WSLManager.Services"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        Title="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[AppTitle]}" 
+        Height="700" Width="1100"
+        MinHeight="500" MinWidth="800"
+        Background="{DynamicResource MaterialDesignPaper}"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="{StaticResource UiFontFamily}"
+        FontSize="13"
+        UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType">
+
+    <Window.InputBindings>
+        <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding ExitCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}"/>
+        <KeyBinding Key="L" Modifiers="Ctrl" Command="{Binding ToggleLanguageCommand}"/>
+        <KeyBinding Key="F1" Command="{Binding ShowShortcutsCommand}"/>
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <conv:StateToColorConverter x:Key="StateToColorConverter"/>
+        <conv:BoolToStatusConverter x:Key="BoolToStatusConverter"/>
+        <conv:LogLevelToColorConverter x:Key="LogLevelToColorConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource MaterialDesignCardBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style x:Key="ToolbarIconButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}">
+            <Setter Property="Width" Value="36"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="2,0"/>
+        </Style>
+
+        <Style x:Key="ActionIconButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Margin" Value="2,0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" MinHeight="200"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="200" MinHeight="120"/>
+        </Grid.RowDefinitions>
+
+        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="5" Background="#E0E0E0" ShowsPreview="True"/>
+
+        <!-- Header / Toolbar -->
+        <Border Grid.Row="0" Style="{StaticResource CardStyle}" Padding="16,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[AppTitle]}" 
+                               FontSize="20" FontWeight="Bold" 
+                               Foreground="{DynamicResource MaterialDesignBody}"
+                               VerticalAlignment="Center"/>
+                    <Border Background="{DynamicResource PrimaryHueMidBrush}" CornerRadius="12" Padding="10,4" Margin="12,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" FontSize="11" FontWeight="SemiBold"/>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Style="{StaticResource ToolbarIconButtonStyle}"
+                            Command="{Binding ShowShortcutsCommand}"
+                            ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[TooltipShortcuts]}">
+                        <materialDesign:PackIcon Kind="Keyboard" Width="20" Height="20"/>
+                    </Button>
+                    <Button Style="{StaticResource ToolbarIconButtonStyle}"
+                            Command="{Binding RefreshCommand}"
+                            ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[TooltipRefresh]}">
+                        <materialDesign:PackIcon Kind="Refresh" Width="20" Height="20"/>
+                    </Button>
+                    <Button Style="{StaticResource ToolbarIconButtonStyle}"
+                            Command="{Binding ToggleLanguageCommand}"
+                            ToolTip="{Binding LanguageText}">
+                        <materialDesign:PackIcon Kind="Translate" Width="20" Height="20"/>
+                    </Button>
+                    <Button Style="{StaticResource ToolbarIconButtonStyle}"
+                            Command="{Binding ExitCommand}"
+                            ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[TooltipExit]}">
+                        <materialDesign:PackIcon Kind="Close" Width="20" Height="20"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Distribution List -->
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="0" ClipToBounds="True">
+            <Grid>
+                <DataGrid ItemsSource="{Binding Distributions}" 
+                          SelectedItem="{Binding SelectedDistribution}"
+                          IsReadOnly="True"
+                          BorderThickness="0"
+                          Style="{StaticResource MaterialDesignDataGrid}"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          AutoGenerateColumns="False"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          RowHeight="48"
+                          PreviewKeyDown="OnDataGridPreviewKeyDown">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[ColumnName]}" 
+                                            Binding="{Binding Name}" Width="Auto">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn Header="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[ColumnState]}" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse Width="10" Height="10" Margin="0,0,8,0">
+                                            <Ellipse.Fill>
+                                                <Binding Path="State" Converter="{StaticResource StateToColorConverter}"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <TextBlock Text="{Binding State}" FontWeight="Bold">
+                                            <TextBlock.Foreground>
+                                                <Binding Path="State" Converter="{StaticResource StateToColorConverter}"/>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[ColumnVersion]}"
+                                            Binding="{Binding Version, StringFormat=WSL {0}}" Width="100"/>
+                        <DataGridTextColumn Header="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[ColumnDefault]}"
+                                            Binding="{Binding IsDefault, Converter={StaticResource BoolToStatusConverter}}" Width="90"/>
+                        <DataGridTextColumn Header="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[ColumnCpu]}"
+                                            Binding="{Binding CpuUsagePercent, StringFormat={}{0:F1}}" Width="90"/>
+                        <DataGridTextColumn Header="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[ColumnMemory]}"
+                                            Binding="{Binding MemoryUsageMB, StringFormat={}{0:F0}}" Width="130"/>
+                        <DataGridTemplateColumn Header="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[ColumnActions]}" Width="250">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Style="{StaticResource ActionIconButtonStyle}"
+                                                Command="{Binding DataContext.StartDistCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                IsEnabled="{Binding CanStart}"
+                                                ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[TooltipStart]}">
+                                            <materialDesign:PackIcon Kind="Play" Width="18" Height="18" Foreground="{DynamicResource MaterialDesignBody}"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ActionIconButtonStyle}"
+                                                Command="{Binding DataContext.StopDistCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                IsEnabled="{Binding CanStop}"
+                                                ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[TooltipStop]}">
+                                            <materialDesign:PackIcon Kind="Stop" Width="18" Height="18" Foreground="#E53935"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ActionIconButtonStyle}"
+                                                Command="{Binding DataContext.RestartDistCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                IsEnabled="{Binding CanStop}"
+                                                ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[TooltipRestart]}">
+                                            <materialDesign:PackIcon Kind="Restart" Width="18" Height="18" Foreground="{DynamicResource MaterialDesignBody}"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ActionIconButtonStyle}"
+                                                Command="{Binding DataContext.DeleteDistCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[TooltipDelete]}">
+                                            <materialDesign:PackIcon Kind="Delete" Width="18" Height="18" Foreground="#E53935"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Empty State -->
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Distributions.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <materialDesign:PackIcon Kind="Linux" Width="64" Height="64" HorizontalAlignment="Center" Margin="0,0,0,12" Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                    <TextBlock Text="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[EmptyStateTitle]}" 
+                               FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesignBody}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[EmptyStateDesc]}" 
+                               FontSize="13" Foreground="{DynamicResource MaterialDesignBodyLight}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                    <TextBlock Text="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[EmptyStateTip]}" 
+                               FontSize="12" Foreground="{DynamicResource MaterialDesignBodyLight}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Log Panel -->
+        <Grid Grid.Row="3" Margin="0,4,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[LogPanelTitle]}"
+                           FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesignBodyLight}" VerticalAlignment="Center"/>
+                <Border Background="{DynamicResource PrimaryHueMidBrush}" CornerRadius="10" Padding="8,2" Margin="8,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding LogCountText}"
+                               Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" FontSize="11" FontWeight="SemiBold"/>
+                </Border>
+            </StackPanel>
+            <Border Grid.Row="1" CornerRadius="8" BorderBrush="#333333" BorderThickness="1"
+                    Background="#1E1E1E" Padding="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Terminal Toolbar -->
+                    <Border Background="#2D2D2D" CornerRadius="8,8,0,0" Padding="8,6">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                    Command="{Binding CopyLogCommand}"
+                                    ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[LogCopy]}"
+                                    Foreground="#CCCCCC">
+                                <materialDesign:PackIcon Kind="ContentCopy" Width="16" Height="16"/>
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                    Command="{Binding ClearLogCommand}"
+                                    ToolTip="{Binding Source={x:Static local:LocalizationService.Instance}, Path=[LogClear]}"
+                                    Foreground="#CCCCCC">
+                                <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    <!-- Terminal Content -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" x:Name="LogScrollViewer">
+                        <ItemsControl ItemsSource="{Binding LogEntries}" Padding="10,8">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="{StaticResource MonoFontFamily}" FontSize="12" LineHeight="20"
+                                                   Foreground="#8BE9FD" Text="{Binding Timestamp, StringFormat='{}{0:HH:mm:ss}'}"/>
+                                        <TextBlock FontFamily="{StaticResource MonoFontFamily}" FontSize="12" LineHeight="20"
+                                                   Foreground="#8BE9FD" Text="  " Margin="4,0,0,0"/>
+                                        <TextBlock FontFamily="{StaticResource MonoFontFamily}" FontSize="12" LineHeight="20"
+                                                   TextWrapping="Wrap">
+                                            <TextBlock.Text>
+                                                <Binding Path="Message"/>
+                                            </TextBlock.Text>
+                                            <TextBlock.Foreground>
+                                                <Binding Path="Level" Converter="{StaticResource LogLevelToColorConverter}"/>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
