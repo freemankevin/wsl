@@ -38,7 +38,9 @@ jobs:
         run: dotnet restore WSLManager.sln
 
       - name: Build
-        run: dotnet build WSLManager.sln -c Release --no-restore
+        run: |
+          dotnet build src/WSLManager.Core/WSLManager.Core.csproj -c Release --no-restore
+          dotnet build src/WSLManager/WSLManager.csproj -c Release --no-restore
 
       - name: Publish
         run: |
