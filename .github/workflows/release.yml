@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Inno Setup
         run: |
-          $url = "https://files.jrsoftware.org/is/6/innosetup-6.2.2.exe"
+          $url = "https://github.com/jrsoftware/issrc/releases/download/is-6_2_2/innosetup-6.2.2.exe"
           $output = "$env:TEMP\innosetup.exe"
           Invoke-WebRequest -Uri $url -OutFile $output
           Start-Process -FilePath $output -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait
