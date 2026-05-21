@@ -8,6 +8,7 @@
     <NoWarn>NU1701</NoWarn>
     <RootNamespace>WSLManager</RootNamespace>
     <AssemblyName>WSLManager</AssemblyName>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>

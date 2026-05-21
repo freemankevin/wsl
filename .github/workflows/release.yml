@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install Inno Setup
+        run: |
+          $url = "https://files.jrsoftware.org/is/6/innosetup-6.2.2.exe"
+          $output = "$env:TEMP\innosetup.exe"
+          Invoke-WebRequest -Uri $url -OutFile $output
+          Start-Process -FilePath $output -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait
+          Write-Host "Inno Setup installed"
+
+      - name: Download Chinese language file for Inno Setup
+        run: |
+          New-Item -ItemType Directory -Force -Path "src\WSLManager.Setup\InnoLanguages"
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kira-96/Inno-Setup-Chinese-Simplified-Translation/main/ChineseSimplified.isl" -OutFile "src\WSLManager.Setup\InnoLanguages\ChineseSimplified.isl"
+
+      - name: Restore
+        run: dotnet restore WSLManager.sln
+
+      - name: Build
+        run: dotnet build WSLManager.sln -c Release --no-restore
+
+      - name: Publish
+        run: |
+          dotnet publish src\WSLManager\WSLManager.csproj `
+            -c Release `
+            --no-build `
+            -o artifacts\publish `
+            -p:PublishSingleFile=true `
+            --self-contained false
+
+      - name: Build Installer
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          & $iscc "src\WSLManager.Setup\WSLManager.iss"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/WSLManager-*-Setup.exe
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

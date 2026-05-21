@@ -18,6 +18,7 @@ public partial class App : Application
     public static TaskbarIcon? TrayIcon { get; private set; }
 
     private MainWindow? _mainWindow;
+    private System.Windows.Controls.Primitives.Popup? _trayPopup;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -45,8 +46,7 @@ public partial class App : Application
                 Visibility = Visibility.Visible
             };
 
-            TrayIcon.ContextMenu = BuildTrayContextMenu();
-
+            TrayIcon.TrayRightMouseUp += (_, _) => ShowTrayPopup();
             TrayIcon.TrayMouseDoubleClick += (_, _) => ShowMainWindow();
         }
         catch (Exception ex)
@@ -110,7 +110,8 @@ public partial class App : Application
 
     private void OnMainWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
-        // Allow window to close normally; tray icon is disposed in OnExit
+        e.Cancel = true;
+        _mainWindow!.Hide();
     }
 
     public static void ShowMainWindow()
@@ -136,60 +137,99 @@ public partial class App : Application
         TrayIcon?.Dispose();
     }
 
-    private static System.Windows.Controls.ContextMenu BuildTrayContextMenu()
+    private void ShowTrayPopup()
     {
-        var menu = new System.Windows.Controls.ContextMenu
-        {
-            Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x2D, 0x2D, 0x2D)),
-            BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x44, 0x44, 0x44)),
-            BorderThickness = new System.Windows.Thickness(1),
-            Padding = new System.Windows.Thickness(6),
-        };
+        if (_trayPopup != null)
+            _trayPopup.IsOpen = false;
 
-        var itemStyle = new System.Windows.Style(typeof(System.Windows.Controls.MenuItem));
-        itemStyle.Setters.Add(new System.Windows.Setter(System.Windows.Controls.MenuItem.ForegroundProperty, System.Windows.Media.Brushes.White));
-        itemStyle.Setters.Add(new System.Windows.Setter(System.Windows.Controls.MenuItem.FontSizeProperty, 13.0));
-        itemStyle.Setters.Add(new System.Windows.Setter(System.Windows.Controls.MenuItem.PaddingProperty, new System.Windows.Thickness(10, 8, 10, 8)));
-        itemStyle.Setters.Add(new System.Windows.Setter(System.Windows.Controls.MenuItem.HorizontalContentAlignmentProperty, System.Windows.HorizontalAlignment.Stretch));
-        var hoverTrigger = new System.Windows.Trigger
-        {
-            Property = System.Windows.UIElement.IsMouseOverProperty,
-            Value = true
-        };
-        hoverTrigger.Setters.Add(new System.Windows.Setter(System.Windows.Controls.MenuItem.BackgroundProperty, new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x19, 0x76, 0xD2))));
-        hoverTrigger.Setters.Add(new System.Windows.Setter(System.Windows.Controls.MenuItem.ForegroundProperty, System.Windows.Media.Brushes.White));
-        itemStyle.Triggers.Add(hoverTrigger);
-        menu.Resources[typeof(System.Windows.Controls.MenuItem)] = itemStyle;
+        var panel = new System.Windows.Controls.StackPanel();
 
-        var sepStyle = new System.Windows.Style(typeof(System.Windows.Controls.Separator));
-        sepStyle.Setters.Add(new System.Windows.Setter(System.Windows.Controls.Separator.BackgroundProperty, new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x44, 0x44, 0x44))));
-        sepStyle.Setters.Add(new System.Windows.Setter(System.Windows.Controls.Separator.HeightProperty, 1.0));
-        sepStyle.Setters.Add(new System.Windows.Setter(System.Windows.Controls.Separator.MarginProperty, new System.Windows.Thickness(6, 4, 6, 4)));
-        menu.Resources[typeof(System.Windows.Controls.Separator)] = sepStyle;
-
-        System.Windows.Controls.MenuItem CreateItem(string header, MaterialDesignThemes.Wpf.PackIconKind iconKind, Action action)
+        void AddItem(string text, Action action)
         {
-            var item = new System.Windows.Controls.MenuItem
+            var border = new System.Windows.Controls.Border
             {
-                Header = header,
-                Icon = new MaterialDesignThemes.Wpf.PackIcon
-                {
-                    Kind = iconKind,
-                    Width = 16,
-                    Height = 16,
-                    Foreground = System.Windows.Media.Brushes.White,
-                    VerticalAlignment = System.Windows.VerticalAlignment.Center
-                }
+                Background = System.Windows.Media.Brushes.Transparent,
+                Padding = new System.Windows.Thickness(14, 10, 14, 10),
+                Cursor = System.Windows.Input.Cursors.Hand,
+                CornerRadius = new System.Windows.CornerRadius(4)
             };
-            item.Click += (_, _) => action();
-            return item;
+            var tb = new System.Windows.Controls.TextBlock
+            {
+                Text = text,
+                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xCC, 0xCC, 0xCC)),
+                FontSize = 12,
+                TextAlignment = System.Windows.TextAlignment.Left
+            };
+            border.Child = tb;
+            border.MouseEnter += (_, _) =>
+                border.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x2A, 0x2A, 0x2A));
+            border.MouseLeave += (_, _) =>
+                border.Background = System.Windows.Media.Brushes.Transparent;
+            border.MouseLeftButtonUp += (_, _) =>
+            {
+                _trayPopup!.IsOpen = false;
+                action();
+            };
+            panel.Children.Add(border);
         }
 
-        menu.Items.Add(CreateItem(LocalizationService.Instance["TrayMenuShow"], MaterialDesignThemes.Wpf.PackIconKind.Application, ShowMainWindow));
-        menu.Items.Add(new System.Windows.Controls.Separator());
-        menu.Items.Add(CreateItem(LocalizationService.Instance["TrayMenuExit"], MaterialDesignThemes.Wpf.PackIconKind.ExitToApp, () => Current.Shutdown()));
+        AddItem(LocalizationService.Instance["TrayMenuShow"], ShowMainWindow);
+        panel.Children.Add(new System.Windows.Controls.Separator
+        {
+            Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x33, 0x33, 0x33)),
+            Height = 1,
+            Margin = new System.Windows.Thickness(0, 2, 0, 2)
+        });
+        AddItem(LocalizationService.Instance["TrayMenuExit"], () => Current.Shutdown());
 
-        return menu;
+        var innerPanel = new System.Windows.Controls.Border
+        {
+            Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x18, 0x18, 0x18)),
+            CornerRadius = new System.Windows.CornerRadius(6),
+            BorderThickness = new System.Windows.Thickness(0),
+            Padding = new System.Windows.Thickness(2),
+            Width = 120,
+            Child = panel,
+            Effect = new System.Windows.Media.Effects.DropShadowEffect
+            {
+                Color = System.Windows.Media.Color.FromArgb(0x33, 0x00, 0x00, 0x00),
+                Direction = 270,
+                ShadowDepth = 2,
+                BlurRadius = 8,
+                Opacity = 0.4
+            }
+        };
+
+        var root = new System.Windows.Controls.Border
+        {
+            Background = System.Windows.Media.Brushes.Transparent,
+            Padding = new System.Windows.Thickness(4),
+            Child = innerPanel
+        };
+
+        root.MouseLeave += (_, _) =>
+        {
+            var timer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = System.TimeSpan.FromMilliseconds(300)
+            };
+            timer.Tick += (_, _) =>
+            {
+                timer.Stop();
+                if (_trayPopup != null && !root.IsMouseOver)
+                    _trayPopup.IsOpen = false;
+            };
+            timer.Start();
+        };
+
+        _trayPopup = new System.Windows.Controls.Primitives.Popup
+        {
+            Child = root,
+            Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint,
+            StaysOpen = true,
+            AllowsTransparency = true
+        };
+        _trayPopup.IsOpen = true;
     }
 
     private static void ConfigureServices(IServiceCollection services)

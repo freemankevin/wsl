@@ -232,21 +232,26 @@ cleanup_old_instances() {
 
     local found=false
 
-    # Windows: find dotnet processes running our project
-    if command -v tasklist &>/dev/null && command -v taskkill &>/dev/null; then
-        # Get PIDs of dotnet processes, then filter by command line for our project
+    if command -v taskkill &>/dev/null; then
+        # Kill published single-file executable directly
+        if taskkill //F //IM "${PROJECT_NAME}.exe" &>/dev/null; then
+            log_success "Terminated ${PROJECT_NAME}.exe"
+            found=true
+            sleep 1
+        fi
+
+        # Also kill dotnet run processes
         local pids
         pids="$(tasklist //FI "IMAGENAME eq dotnet.exe" //FO CSV 2>/dev/null | grep -o '[0-9]\+' | head -20 || true)"
 
         for pid in $pids; do
-            # Try to get command line (wmic is available on most Windows)
             if command -v wmic &>/dev/null; then
                 local cmdline
                 cmdline="$(wmic process where "ProcessId=$pid" get CommandLine //NOINTERACTIVE 2>/dev/null | grep -i "$PROJECT_NAME" || true)"
                 if [[ -n "$cmdline" ]]; then
-                    log_warn "Found old instance (PID: $pid)"
+                    log_warn "Found old dotnet instance (PID: $pid)"
                     if taskkill //F //PID "$pid" &>/dev/null; then
-                        log_success "Terminated old instance (PID: $pid)"
+                        log_success "Terminated old dotnet instance (PID: $pid)"
                         found=true
                     fi
                 fi

@@ -7,12 +7,14 @@
            UpgradeCode="A1B2C3D4-E5F6-7890-ABCD-EF1234567890"
            Scope="perMachine">
 
-    <MajorUpgrade DowngradeErrorMessage="已安装更高版本。" />
-    <ui:WixUI Id="WixUI_Minimal" />
+    <MajorUpgrade DowngradeErrorMessage="已安装更高版本。A newer version is already installed." />
+    <ui:WixUI Id="WixUI_InstallDir" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
     <Feature Id="MainFeature" Title="WSL Manager">
       <ComponentGroupRef Id="PublishedComponents" />
       <ComponentRef Id="ApplicationShortcuts" />
+      <ComponentRef Id="DesktopShortcut" />
     </Feature>
 
     <StandardDirectory Id="ProgramFiles64Folder">
@@ -22,9 +24,14 @@
                 Source="$(var.WSLManager.TargetDir)WSLManager.exe"
                 KeyPath="yes" />
         </Component>
-        <Component Id="CoreDll" Bitness="always64">
-          <File Id="WSLManagerCoreDll"
-                Source="$(var.WSLManager.TargetDir)WSLManager.Core.dll"
+        <Component Id="HarfBuzzDll" Bitness="always64">
+          <File Id="libHarfBuzzSharpDll"
+                Source="$(var.WSLManager.TargetDir)libHarfBuzzSharp.dll"
+                KeyPath="yes" />
+        </Component>
+        <Component Id="SkiaDll" Bitness="always64">
+          <File Id="libSkiaSharpDll"
+                Source="$(var.WSLManager.TargetDir)libSkiaSharp.dll"
                 KeyPath="yes" />
         </Component>
       </Directory>
@@ -50,9 +57,26 @@
       </Directory>
     </StandardDirectory>
 
+    <StandardDirectory Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="B2C3D4E5-F6A7-8901-BCDE-F23456789013">
+        <Shortcut Id="DesktopShortcut"
+                 Name="WSL Manager"
+                 Description="WSL Manager"
+                 Target="[INSTALLFOLDER]WSLManager.exe"
+                 WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU"
+                        Key="Software\WSLManager"
+                        Name="DesktopShortcut"
+                        Type="integer"
+                        Value="1"
+                        KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+
     <ComponentGroup Id="PublishedComponents" Directory="INSTALLFOLDER">
       <ComponentRef Id="MainExecutable" />
-      <ComponentRef Id="CoreDll" />
+      <ComponentRef Id="HarfBuzzDll" />
+      <ComponentRef Id="SkiaDll" />
     </ComponentGroup>
   </Package>
 </Wix>
